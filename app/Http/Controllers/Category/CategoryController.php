@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use App\Category;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; 
 
 class CategoryController extends Controller
 {
@@ -15,18 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $category =Category::all();
+        return response()->json(['data'=>$category], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,7 +28,14 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name'=>'required',
+            'description'=>'required'
+        ];
+        $validator = $this->validate($request, $rules);
+        $name = $request->only('name','description');
+        $category = Category::create($name);
+        return response()->json(['data'=>$category], 201);
     }
 
     /**
@@ -45,21 +44,15 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
-    {
-        //
+    public function show($category)
+    {          
+        $category = Category::find($category);
+        if (is_null($category)) {
+            return response()->json(['data'=>'Category does not exist'], 200);
+        }
+        return response()->json(['data'=>$category], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -70,7 +63,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->fill($request->only('name','description')); 
+
+        if (!$category->isDirty()) {
+            return response()->json(['data'=>'You need to specify different value to update','code'=>422], 422);
+        }
+        $category->save();
+        return response()->json(['data'=>$category],200);
     }
 
     /**
@@ -81,6 +80,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response()->json(['data'=>$category], 200);
     }
 }

@@ -27,8 +27,10 @@ Route::apiResource('seller', 'Seller\SellerController', ['only'=>['index','show'
 
 // Transaction
 Route::apiResource('transaction', 'Transaction\TransactionController', ['only'=>['index','show']]);
+Route::apiResource('transaction.categories', 'Transaction\TransactionCategoryController', ['only'=>['index']]);
 
 // User
 Route::apiResource('user', 'User\UserController');
+
 
 
