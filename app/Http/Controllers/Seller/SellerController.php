@@ -27,10 +27,11 @@ class SellerController extends Controller
      */
     public function show($seller)
     {
-        $seller = Seller::has('products')->findOrFail($seller);
-        if (count($seller) ==0) {
+        $seller = Seller::has('products')->find($seller);
+        if (is_null($seller)) {
             return response()->json(['error'=>'Not a Seller'], 200);
         }
+        
         return response()->json(['data'=>$seller], 200);
     }
 

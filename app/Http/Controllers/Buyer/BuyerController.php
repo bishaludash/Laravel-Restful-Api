@@ -28,8 +28,8 @@ class BuyerController extends Controller
      */
     public function show(Buyer $buyer)
     {
-        $buyer = Buyer::has('transactions')->findOrFail($buyer);
-        if (count($buyer) ==0) {
+        $buyer = Buyer::has('transactions')->find($buyer);
+        if (is_null($buyer)) {
             return response()->json(['error'=>'Not a buyer'], 200);
         }
         return response()->json(['data'=>$buyer], 200);

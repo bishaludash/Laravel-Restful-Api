@@ -119,4 +119,13 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['data'=>'User deleted successfully'], 200);
     }
+
+    public function verify($token){
+        $user = User::where('verification_token', $token)->firstOrFail();
+        $user->verified= User::VERIFIED_USER;
+        $user->verification_token = null;
+        $user->save();
+
+        return response()->json(['data'=>'User has been verified successfully', 'code'=>200], 200);
+    }
 }

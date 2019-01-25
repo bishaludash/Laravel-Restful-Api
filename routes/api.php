@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/', function(){
+	return "Api";
+});
 
 // Buyer
 Route::apiResource('buyer', 'Buyer\BuyerController', ['only'=>['index','show']]);
@@ -29,9 +32,16 @@ Route::apiResource('category.buyer', 'Category\CategoryBuyerController', ['only'
 
 // Product
 Route::apiResource('product', 'Product\ProductController',['only'=>['index','show']]);
+Route::apiResource('product.transactions', 'Product\ProductTransactionController',['only'=>['index']]);
+Route::apiResource('product.buyers', 'Product\ProductBuyerController',['only'=>['index']]);
+Route::apiResource('product.categories', 'Product\ProductCategoryController',['only'=>['index','update','destroy']]);
 
 // Seller
 Route::apiResource('seller', 'Seller\SellerController', ['only'=>['index','show']]);
+Route::apiResource('seller.transactions', 'Seller\SellerTransactionController', ['only'=>['index']]);
+Route::apiResource('seller.categories', 'Seller\SellerCategoryController', ['only'=>['index']]);
+Route::apiResource('seller.buyers', 'Seller\SellerBuyerController', ['only'=>['index']]);
+Route::apiResource('seller.products', 'Seller\SellerProductController',['except'=>'show']);
 
 // Transaction
 Route::apiResource('transaction', 'Transaction\TransactionController', ['only'=>['index','show']]);
@@ -40,6 +50,7 @@ Route::apiResource('transaction.sellers', 'Transaction\TransactionSellerControll
 
 // User
 Route::apiResource('user', 'User\UserController');
+Route::name('verify')->get('user/verify/{token}', 'User\UserController@verify');
 
 
 
